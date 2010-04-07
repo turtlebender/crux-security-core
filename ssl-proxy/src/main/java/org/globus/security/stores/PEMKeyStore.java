@@ -46,7 +46,6 @@ import java.util.logging.Logger;
 import org.globus.security.CredentialException;
 import org.globus.security.X509Credential;
 import org.globus.security.provider.KeyStoreParametersFactory;
-import org.globus.security.provider.KeyStoreParametersFactory.FileStoreParameters;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
