@@ -1,0 +1,107 @@
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook V4.4//EN" "http://www.oasis-open.org/docbook/sgml/4.4/docbookx.dtd"><article><section><title>Introduction</title></section><para>The Globus toolkit provides a Java security provider (<ulink url="http://java.sun.com/j2se/1.5.0/docs/api/java/security/Provider.html">java.security.Provider</ulink>) which adds additional functionality to the java security libraries.  In particular, the provider adds support for:</para><itemizedlist><listitem>Support use of X.509 Proxy Certificates with SSL</listitem><listitem>KeyStore provider that supports X509 certificates and X.509 Proxy</listitem><listitem>Certificates stored in PEM encoded files</listitem><listitem>CertStore providern that supports trusted CA certificates as PEM</listitem><listitem>encoded files.</listitem><listitem>Certificate Signing Policies enforced with path validation</listitem><listitem>Ant-style patterns for specifying locations of security material</listitem></itemizedlist><para>Because the provider is based on the Java security library, it can be used without any third party dependencies.</para><section><title>Installation</title></section><para>Installing the provider is very simple.  Simply include the jar (along with the required bouncycastle jar). in the classpath of your application.  The Provider will automatically register itself with Java and you'll be able to use the provider.</para><section><title>Low-Level Usage</title></section><section><title>PEM Keystore</title></section><para>This implementation of java.security.KeyStore supports loading X.509 Proxy Credentials and X.509 Certificates from PEM encoded files. You can instantiate this provider just like you would any other keystore. So, for example:</para><programlisting>java.security.KeyStore.getInstance(&quot;PEMFilebasedKeyStore&quot;, &quot;Globus&quot;);
+</programlisting><para>The first argument is the KeyStore type and the second argument is the Provider name.  In most situations, the provider name is not required, since the type is usually unique.  However, by supplying the Provider name you guarantee that you will be using the correct KeyStore type.</para><para>There are two ways to load the KeyStore once you have instantiated it. First, you can create and provide an instance of org.globus.security.provider.FileStoreParameters.  Globus provides a helper class to assist.</para><para>To load a KeyStore based on a proxy certificate, you do the following:</para><programlisting>KeyStore keystore =
+java.security.KeyStore.getInstance(&quot;PEMFilebasedKeyStore&quot;, &quot;Globus&quot;);
+keystore.load(org.globus.security.provider.KeyStoreParametersFactory.createProxyCertParameters(&quot;/path/to/my/proxy/certificate&quot;;
+</programlisting><para>To load a X.509 Proxy Certificate or X.509 Certificate into the KeyStore, you do:</para><programlisting>KeyStore keystore =
+java.security.KeyStore.getInstance(&quot;PEMFilebasedKeyStore&quot;, &quot;Globus&quot;);
+keystore.load(org.globus.security.provider.KeyStoreParametersFactory.createCertKeyParameters(&quot;/path/to/my/certificate&quot;,
+&quot;/path/to/my/key&quot;));
+</programlisting><para>The other method of loading the KeyStore is to use a properties file which defines the appropriate values.  A property file for a proxy certificate would look like:</para><programlisting># Name of certificate file
+certificateFilename=file:/configuratorTest/usercert.pem
+# Name of key file
+keyFilename=file:/configuratorTest/userkey.key
+</programlisting><para>You might notice that the paths are specified with the &quot;file:&quot; prefix. This is because we could have loaded the credentials from our classpath. In that case, you would use the prefix &quot;classpath:&quot;.</para><para>The equivalent properties file for specifying a proxy file is:</para><programlisting>#Location of the proxy certificate
+proxyFilename=file:/configuratorTest/myproxy.pem
+</programlisting><para>Again, this could be either on the filesystem or on the classpath.  To load the keystore from this file you use the following:</para><programlisting>KeyStore keystore =
+java.security.KeyStore.getInstance(&quot;PEMFilebasedKeyStore&quot;, &quot;Globus&quot;);
+keystore.load(new
+FileInputStream(&quot;/configuratorTest/keystore.properties&quot;), &quot;&quot;);
+</programlisting><para>The second argument is empty because we do not require a password to read the properties file.</para><para>At this point, you have an instantiated and loaded KeyStore based on your PEM encoded files.</para><para>This KeyStore will contain the keys as specified in the KeyStore configuration.  You can retrieve keys using the standard Java KeyStore SPI.  As always, you will need to provide a passphrase to retrieve encrypted keys.</para><section><title>PEM TrustStore</title></section><para>The Java Security Framework uses the same type of KeyStore object to store trusted certificates, as well.  As a result, configuring a trusted certificate store is very similar to creating a credential store.</para><para>Again, to instantiate a store, you use the following code:</para><programlisting>java.security.KeyStore.getInstance(&quot;PEMFilebasedKeyStore&quot;, &quot;Globus&quot;);
+</programlisting><para>To load your certificates into your store, you also use similar code to above:</para><programlisting>KeyStore keystore =
+java.security.KeyStore.getInstance(&quot;PEMFilebasedKeyStore&quot;, &quot;Globus&quot;);
+keystore.load(org.globus.security.provider.KeyStoreParametersFactory.createTrustStoreParameters(trustedCertificateDirectories,
+defaultDirectory&quot;));
+</programlisting><para>Here, you supply the path (or paths) to the directory which holds the trusted certificates.  You can also supply a default certificate directory.  This directory is where certificates that have been added to the trust store programmatically will be saved.</para><para>You can also load certificates via a properties file.  The format of that file is:</para><programlisting>#Path or Paths to trusted certificates
+directory_list=classpath:/configuratorTest/
+#Path to default trusted certificates location
+default_directory=file:/home/trhowe/.certificates
+</programlisting><para>Again, to load the certificates, you can use the following:</para><programlisting>KeyStore keystore =
+java.security.KeyStore.getInstance(&quot;PEMFilebasedKeyStore&quot;, &quot;Globus&quot;);
+keystore.load(new
+FileInputStream(&quot;/configuratorTest/truststore.properties&quot;), &quot;&quot;);
+</programlisting><para>The following table summarizes the properties supported by the Globus provided KeyStore implementation:</para><informaltable frame="none" rowsep="0" colsep="0"><tgroup cols="3"><colspec align="center"></colspec><colspec align="center"></colspec><colspec align="center"></colspec><tbody><row><entry><emphasis role="bold">Property</emphasis></entry><entry><emphasis role="bold">Required</emphasis></entry><entry><emphasis role="bold">Description</emphasis></entry></row><row><entry>proxyFilename</entry><entry>no</entry></row></tbody></tgroup></informaltable><informaltable frame="none" rowsep="0" colsep="0"><tgroup cols="2"><colspec align="center"></colspec><colspec align="center"></colspec><tbody><row><entry>certificateFilename</entry><entry>no</entry></row></tbody></tgroup></informaltable><informaltable frame="none" rowsep="0" colsep="0"><tgroup cols="2"><colspec align="center"></colspec><colspec align="center"></colspec><tbody><row><entry>keyFilename</entry><entry>no</entry></row></tbody></tgroup></informaltable><informaltable frame="none" rowsep="0" colsep="0"><tgroup cols="3"><colspec align="center"></colspec><colspec align="center"></colspec><colspec align="center"></colspec><tbody><row><entry>directory_list</entry><entry>no</entry><entry>A list of patterns for trusted certificates</entry></row><row><entry>default_directory</entry><entry>no</entry></row></tbody></tgroup></informaltable><section><title>CertificateStore</title></section><para>The JavaDocs for java.security.CertStore state, &quot;Unlike a KeyStore, which provides access to a cache of private keys and trusted certificates, a CertStore is designed to provide access to a potentially vast repository of untrusted certificates and CRLs&quot;.  So, the primary use of the Globus provided CertStore will likely be to store Certificate Revocation Lists (CRLs).  Globus supports CRLs which are PEM encoded.</para><para>To instantiate the Globus provided CertStore you:</para><programlisting>parameters = new ResourceCertStoreParameters(null,
+&quot;classpath:/testTrustStore/*.r*&quot;);		
+CertStore store = CertStore.getInstance(&quot;PEMFilebasedCertStore&quot;,
+parameters);
+</programlisting><para>Unlike the KeyStore, a CertStore cannot be loaded via a file.  So, here you will explicitly create your CertStoreParameters and passthem to the CertStore getInstance() method.</para><para>The first argument in the ResourceCertStore is the path or paths that specify where any non-trusted certificates live.  The second argument is the pattern for where the CRLs are.</para><section><title>Signing Policy Store</title></section><para>The Java security APIs do not provide support for certificate signing policies.  The Globus provider adds this support, however, because signing policies are not part of the standard Java security API, there is no SPI access to the signing policy store.  As a result, the signing policy store needs to be constructed programmatically as such:</para><programlisting>ResourceSigningPolicyStoreParameters policyParams = new
+ResourceSigningPolicyStoreParameters(&quot;classpath:/configuratorTest/*.signing_policy&quot;);
+ResourceSigningPolicyStore policyStore = new
+ResourceSigningPolicyStore(policyParams);
+</programlisting><para>This will load all signing policy files which match the supplied pattern.</para><para>That is how you can load the low level security objects provided by the Globus security provider.</para><section><title>SSL Usage</title></section><section><title>TrustManager</title></section><para>In order to support SSL with proxy certificates the Globus security provider also provides a custom TrustManager.  This trust manager can be used to validate a certificate chain over SSL.</para><para>To create a Globus provided trust manager, you:</para><programlisting>KeyStore trustStore = . . . 
+CertStore crlStore = . . . 
+SigningPolicyStore policyStore = . . . 
+boolean rejectLimitProxy = . . . 
+Map&lt;String, ProxyPolicyHandler&gt; handlers = . . . 
+
+ManagerFactoryParameters parameters = new
+GlobusTrustManagerFactoryParameters(trustStore, crlStore, policyStore,
+rejectLimitProxy, handlers);
+TrustManagerFactory fact = TrustManagerFactory.getInstance(&quot;GSI&quot;);
+fact.init(parameters);
+TrustManager[] trustManagers = fact.getTrustManagers();			
+</programlisting><para>To programmatically create a Globus provided TrustManager, you need to have an instantiated trusted certificate store at a minimum.  This does not need to be a Globus provided trusted certificate store as described above.  Any trusted certificate store will work.  You may also supply a store of CRLs and a signing policy store.  These are optional, but recommended.  The Globus provided TrustManager also supports the option of rejecting a limited proxy certificate automatically. The last argument allows the user to supply custom handlers which can apply arbitrary checks to certificates as they are validated.</para><para>The TrustManager array can be used to initialize an SSLContext in the standard Java manner.</para><section><title>SSLConfigurator</title></section><para>Globus provides a helper class as part of it's jsse module to make configuring SSL simpler.  The primary class is SSLConfigurator.  This allows you to set the properties of the various security material stores and will use those to create an SSL context or SocketFactory.</para><para>Here is an example of using the SSLConfigurator:</para><programlisting>SSLConfigurator config = new SSLConfigurator();
+config.setCrlLocationPattern(null);
+config.setCrlStoreType(GlobusProvider.CERTSTORE_TYPE);
+
+config.setCredentialStoreLocation(&quot;classpath:/mykeystore.properties&quot;);
+config.setCredentialStorePassword(&quot;password&quot;);
+config.setCredentialStoreType(GlobusProvider.KEYSTORE_TYPE);
+
+config.setTrustAnchorStoreLocation(&quot;classpath:/mytruststore.properties&quot;);
+config.setTrustAnchorStorePassword(&quot;password&quot;);
+config.setTrustAnchorStoreType(GlobusProvider.KEYSTORE_TYPE);
+
+ResourceSigningPolicyStoreParameters policyParams = new
+ResourceSigningPolicyStoreParameters(
+		&quot;classpath:/globus_crux_ca.signing_policy&quot;);
+ResourceSigningPolicyStore policyStore = new
+ResourceSigningPolicyStore(policyParams);
+
+config.setPolicyStore(policyStore);
+config.getSSLContext()
+</programlisting><para>This will configure your SSLContext for you.</para><section><title>Tomcat Support</title></section><para>In addition to the API level support described above, Globus provides a Tomcat connector so that you can easily run Tomcat with SSL proxy certificate support.  This connector is configured in the same manner as a usual connector.</para><para>First, to install the connector, put the jars in the $CATALINAHOME/lib directory and the provider and Connector will be available.</para><para>The following table lists the additional properties available to configure the connector:</para><informaltable frame="none" rowsep="0" colsep="0"><tgroup cols="3"><colspec align="center"></colspec><colspec align="center"></colspec><colspec align="center"></colspec><tbody><row><entry><emphasis role="bold">Property</emphasis></entry><entry><emphasis role="bold">Required</emphasis></entry><entry><emphasis role="bold">Description</emphasis></entry></row><row><entry>crlLocation</entry><entry>no</entry><entry>A pattern for the path of the CRLs</entry></row><row><entry>signingPolicyLocation</entry><entry>no</entry><entry>A pattern for the path of the CRLs</entry></row><row><entry>rejectLimitedProxy</entry><entry>no</entry></row></tbody></tgroup></informaltable><para>These properties are used in conjunction with the standard tomcat properties for configuring SSL.  Here is an example of a configured connector:</para><programlisting>&lt;Connector 
+           port=&quot;8443&quot; maxThreads=&quot;200&quot;
+           scheme=&quot;https&quot; secure=&quot;true&quot; SSLEnabled=&quot;true&quot;
+           keystoreFile=&quot;${user.home}/.keystore&quot;
+keystoreType=&quot;PEMFilebasedKeyStore&quot; 
+	   sslImplementation=&quot;org.globus.crux.security.tomcat.GlobusSSLImplementation&quot;
+	   socketFactory=&quot;org.globus.crux.security.tomcat.GlobusSSLSocketFactory&quot;
+	   signingPolicyLocation=&quot;${user.home}/security/*.signing_policy&quot;
+	   crlLocation=&quot;${user.home}/security/*.r0&quot;
+           clientAuth=&quot;true&quot; sslProtocol=&quot;TLS&quot;/&gt;
+</programlisting><para>By specifying the sslImplementation and socketFactory, you tell Tomcat to use the Globus SSLConnector.  You may also specify the parameters for the various stores as described above.  The clientAuth parameter specifies whether the server is going to authenticate the client.  This well almost always be true, since that's precisely what we are trying to do.</para><section><title>Jetty Support</title></section><para>We also provide support for Jetty.  To create an embedded Jetty server which supports SSL with proxy certificates, you instantiated the container like:</para><programlisting>SSLConfigurator config = new SSLConfigurator();
+config.setCrlLocationPattern(null);
+config.setCrlStoreType(GlobusProvider.CERTSTORE_TYPE);
+
+config.setCredentialStoreLocation(&quot;classpath:/mykeystore.properties&quot;);
+config.setCredentialStorePassword(&quot;password&quot;);
+config.setCredentialStoreType(GlobusProvider.KEYSTORE_TYPE);
+
+config.setTrustAnchorStoreLocation(&quot;classpath:/mytruststore.properties&quot;);
+config.setTrustAnchorStorePassword(&quot;password&quot;);
+config.setTrustAnchorStoreType(GlobusProvider.KEYSTORE_TYPE);
+
+ResourceSigningPolicyStoreParameters policyParams = new
+ResourceSigningPolicyStoreParameters(&quot;classpath:/globus_crux_ca.signing_policy&quot;);
+ResourceSigningPolicyStore policyStore = new
+ResourceSigningPolicyStore(policyParams);
+
+config.setPolicyStore(policyStore);
+		
+GlobusSslSocketConnector connector = new
+GlobusSslSocketConnector(config);
+server = new Server();
+server.addConnector(connector);
+. . . 
+server.start();				
+</programlisting><para>This should look familiar to above.  The same thing can be configured use Jetty XML.  Jetty XML is a simple mapping between Java method calls and XML, so there is no reason to write out the XML here.  The XML configuration would look essentially the same as above.</para></article>
