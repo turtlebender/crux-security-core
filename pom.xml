@@ -57,6 +57,7 @@
 		<module>testUtils</module>
 		<module>containerTestUtils</module>
 		<module>jsse</module>
+		<module>assembly</module>
 	</modules>
 
 	<build>
@@ -228,7 +229,7 @@
 			-->
 			<dependency>
 				<groupId>${project.groupId}</groupId>
-				<artifactId>${project.groupId}.sslproxies</artifactId>
+				<artifactId>sslproxies</artifactId>
 				<version>${crux.version}</version>
 			</dependency>
 			<dependency>
@@ -260,6 +261,13 @@
 				<version>${crux.version}</version>
 			</dependency>
 			<dependency>
+				<groupId>${project.groupId}</groupId>
+				<artifactId>tomcat</artifactId>
+				<version>${crux.version}</version>
+			</dependency>
+			
+			<dependency>
+			
 				<groupId>${project.groupId}</groupId>
 				<artifactId>org.globus.crux.security.authorization</artifactId>
 				<version>${crux.version}</version>

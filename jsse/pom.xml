@@ -60,7 +60,7 @@
 		</dependency>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
-			<artifactId>${project.groupId}.sslproxies</artifactId>
+			<artifactId>sslproxies</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.aries.blueprint</groupId>

@@ -148,13 +148,7 @@
 						<configuration>
 							<jvmArgs>
 								<jvmArg>-Dcuke4duke.objectFactory=cuke4duke.internal.jvmclass.PicoFactory</jvmArg>
-							</jvmArgs>
-							<!--
-								You may not need all of these arguments in your own project. We
-								have a lot here for testing purposes...
-							-->
-
-
+							</jvmArgs>							
 							<cucumberArgs>
 								<cucumberArg>--format</cucumberArg>
 								<cucumberArg>pretty</cucumberArg>
@@ -178,7 +172,6 @@
 					</plugin>
 				</plugins>
 			</build>
-		</profile>
-			
+		</profile>			
 	</profiles>
 </project>
