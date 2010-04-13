@@ -1,7 +1,18 @@
 Manifest-Version: 1.0
+Bundle-Version: 1.0.0.SNAPSHOT
+Tool: Bnd-0.0.357
+Bundle-Name: Globus Security Extensions for Tomcat
+Bnd-LastModified: 1271187153333
+Created-By: 1.6.0_17 (Apple Inc.)
 Bundle-ManifestVersion: 2
-Bundle-Name: tomcat
-Bundle-SymbolicName: tomcat
-Bundle-Version: 1.0.0.qualifier
-Export-Package: org.globus.crux.security,
- org.globus.crux.security.tomcat
+Bundle-SymbolicName: org.globus.crux.security.tomcat
+Export-Package: org.globus.crux.security.tomcat
+Import-Package: javax.net.ssl,
+ org.apache.tomcat.util.net;version="(6.0.0,7.0.0)",
+ org.apache.tomcat.util.net.jsse;version="(6.0.0,7.0.0)",
+ org.globus.crux.jsse;version="[1.0.0,2.0.0)",
+ org.globus.security;version="[1.0.0,2.0.0)",
+ org.globus.security.provider;version="[1.0.0,2.0.0)",
+ org.globus.security.stores;version="[1.0.0,2.0.0)",
+ org.globus.security.trustmanager;version="[1.0.0,2.0.0)"
+

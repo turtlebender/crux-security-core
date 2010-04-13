@@ -7,11 +7,10 @@
 		<version>1.0-SNAPSHOT</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>org.globus.crux.security</groupId>
 	<artifactId>assembly</artifactId>
 	<packaging>pom</packaging>
-	<version>1.0-SNAPSHOT</version>
-
+	<name>Crux Core Security Packaging Support</name>
+	
 	<properties>
 		<crux.name>crux-core-security</crux.name>
 	</properties>
@@ -28,7 +27,7 @@
 			</resource>
 		</resources>
 
-		<plugins>			
+		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-assembly-plugin</artifactId>
@@ -51,11 +50,50 @@
 							<tarLongFileMode>gnu</tarLongFileMode>
 						</configuration>
 					</execution>
+					<execution>
+						<id>unix-src</id>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+						<configuration>
+							<descriptors>
+								<descriptor>src/main/descriptors/unix-src.xml</descriptor>
+							</descriptors>
+							<finalName>globus-crux-src-${project.version}</finalName>							
+							<tarLongFileMode>gnu</tarLongFileMode>
+						</configuration>
+					</execution>
+					<execution>
+						<id>windows-bin</id>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+						<configuration>
+							<descriptors>
+								<descriptor>src/main/descriptors/windows-bin.xml</descriptor>
+							</descriptors>
+							<finalName>globus-crux-${project.version}</finalName>							
+						</configuration>
+					</execution>
+					<execution>
+						<id>windows-src</id>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+						<configuration>
+							<descriptors>
+								<descriptor>src/main/descriptors/windows-src.xml</descriptor>
+							</descriptors>
+							<finalName>globus-crux-src-${project.version}</finalName>							
+						</configuration>
+					</execution>
 				</executions>
 			</plugin>
 		</plugins>
 	</build>
-
 	<dependencies>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
@@ -72,6 +110,18 @@
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>org.globus.crux.jsse</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>docs</artifactId>
+			<type>pdf</type>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>docs</artifactId>
+			<type>zip</type>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.bouncycastle</groupId>

@@ -1,0 +1,18 @@
+Manifest-Version: 1.0
+Export-Package: org.globus.crux.jsse;version="1.0.0"
+Ignore-Package: org.globus.crux.jsse,org.globus.crux.jsse.internal
+Built-By: turtlebender
+Tool: Bnd-0.0.357
+Bundle-Name: Globus Crux JSSE support for OSGi
+Created-By: Apache Maven Bundle Plugin
+Build-Jdk: 1.6.0_17
+Bundle-Version: 1.0.0.SNAPSHOT
+Bnd-LastModified: 1271188267148
+Bundle-ManifestVersion: 2
+Import-Package: javax.net.ssl,
+ org.globus.security.provider;version="[1.0.0,2.0.0)",
+ org.globus.security.proxyExtension;version="[1.0.0,2.0.0)",
+ org.globus.security.stores;version="[1.0.0,2.0.0)",
+ org.slf4j;version="[1.5.0,1.6.0)"
+Bundle-SymbolicName: org.globus.crux.jsse
+

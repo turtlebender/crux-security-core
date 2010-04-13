@@ -29,17 +29,15 @@
 
 	<build>
 		<plugins>
-			<!--
-				<plugin> <groupId>org.apache.felix</groupId>
-				<artifactId>maven-bundle-plugin</artifactId>
-				<version>2.0.1</version> <extensions>true</extensions>
-				<configuration> <instructions>
-				<Export-Package>org.globus.security.provider,org.globus.security,org.globus.security.filestore</Export-Package>
-				<Private-Package>org.globus.security.bc,org.globus.security.proxyExtension,org.globus.security.util,org.globus.util,org.globus.security.stores</Private-Package>
-				<Import-Package>!junit.*,org.springframework.*;resolution:=optional,*</Import-Package>
-				<Embed-Dependency>*;groupId=org.bouncycastle;inline=false</Embed-Dependency>
-				</instructions> </configuration> </plugin>
-			-->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<configuration>
+					<archive>
+						<manifestFile>META-INF/MANIFEST.MF</manifestFile>
+					</archive>
+				</configuration>
+			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-shade-plugin</artifactId>

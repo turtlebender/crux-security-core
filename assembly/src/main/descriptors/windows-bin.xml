@@ -24,7 +24,7 @@
 		http://jira.codehaus.org/browse/MASSEMBLY-301
 	-->
 	<formats>
-		<format>tar.gz</format>
+		<format>zip</format>
 	</formats>
 	<fileSets>
 		<!-- Copy license and other files from root -->
@@ -37,7 +37,7 @@
 				<include>LICENSE</include>
 				<include>NOTICE</include>
 			</includes>
-			<lineEnding>unix</lineEnding>
+			<lineEnding>dos</lineEnding>
 		</fileSet>
 	</fileSets>
 	

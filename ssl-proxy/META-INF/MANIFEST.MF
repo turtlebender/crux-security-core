@@ -4,9 +4,9 @@ Bundle-Name: ssl_proxy
 Bundle-SymbolicName: ssl_proxy
 Bundle-Version: 1.0.0.qualifier
 Export-Package: 
- org.globus.security,
- org.globus.security.bc,
- org.globus.security.filestore,
- org.globus.security.provider,
- org.globus.security.proxyExtension,
- org.globus.security.util
+ org.globus.security;version="1.0.0",
+ org.globus.security.bc;version="1.0.0",
+ org.globus.security.filestore;version="1.0.0",
+ org.globus.security.provider;version="1.0.0",
+ org.globus.security.proxyExtension;version="1.0.0",
+ org.globus.security.util;version="1.0.0"

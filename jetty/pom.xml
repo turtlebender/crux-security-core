@@ -21,57 +21,60 @@
 	</parent>
 	<groupId>org.globus.crux.security</groupId>
 	<artifactId>jetty</artifactId>
-	<packaging>bundle</packaging>
+	<packaging>jar</packaging>
 	<name>Globus Security Support for Jetty</name>
 	<url>http://maven.apache.org</url>
 
+	<properties>
+		<export.package>org.globus.security.jetty</export.package>
+		<import.package>!org.globus.security.jetty*</import.package>
+	</properties>
 
 	<build>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.felix</groupId>
-				<artifactId>maven-bundle-plugin</artifactId>
-				<extensions>true</extensions>
-				<configuration>
-					<instructions>
-						<Bundle-SymbolicName>${project.groupId}.${project.artifactId}</Bundle-SymbolicName>
-						<Export-Package>org.globus.security.jetty,</Export-Package>
-						<Import-Package>!org.globus.security.jetty*,*</Import-Package>
-					</instructions>
-				</configuration>
+				<artifactId>maven-bundle-plugin</artifactId>				
 			</plugin>
 		</plugins>
 	</build>
+	
 	<dependencies>
+		<!-- Crux dependency -->
 		<dependency>
 			<groupId>${project.groupId}</groupId>
-			<artifactId>org.globus.crux.jsse</artifactId>
-			<version>1.0-SNAPSHOT</version>
+			<artifactId>jsse</artifactId>
 		</dependency>
+
+		<!-- Spring dependency -->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>org.springframework.core</artifactId>
 		</dependency>
+
+		<!-- Logging dependency -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
 		</dependency>
+
+		<!-- Jetty dependencies -->
 		<dependency>
 			<groupId>org.eclipse.jetty</groupId>
 			<artifactId>jetty-server</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.jetty</groupId>
-			<artifactId>jetty-webapp</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.jetty</groupId>
 			<artifactId>jetty-http</artifactId>
 		</dependency>
+
+		<!-- BouncyCastle dependency -->
 		<dependency>
 			<groupId>org.bouncycastle</groupId>
 			<artifactId>bcprov-jdk15</artifactId>
 		</dependency>
+
+		<!-- Test Dependencies -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-simple</artifactId>
@@ -80,6 +83,11 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.jetty</groupId>
+			<artifactId>jetty-webapp</artifactId>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
