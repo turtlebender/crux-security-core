@@ -18,11 +18,11 @@ package org.globus.crux.security.tomcat;
 import org.apache.tomcat.util.net.jsse.JSSESocketFactory;
 import org.globus.security.X509ProxyCertPathParameters;
 import org.globus.security.provider.GlobusProvider;
-import org.globus.security.provider.PKITrustManager;
-import org.globus.security.provider.X509ProxyCertPathValidator;
+import org.globus.security.trustmanager.PKITrustManager;
+import org.globus.security.trustmanager.X509ProxyCertPathValidator;
 import org.globus.security.stores.ResourceSigningPolicyStore;
 import org.globus.security.stores.ResourceSigningPolicyStoreParameters;
-import org.globus.security.util.GlobusSSLHelper;
+import org.globus.crux.jsse.GlobusSSLHelper;
 
 import javax.net.ssl.SSLServerSocket;
 import javax.net.ssl.TrustManager;

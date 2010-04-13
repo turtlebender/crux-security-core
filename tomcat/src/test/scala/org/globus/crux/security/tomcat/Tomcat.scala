@@ -1,5 +1,3 @@
-package org.globus.crux.security
-
 import collection.mutable.Map
 import java.util.{ArrayList, Arrays, List => JList, Map => JMap, HashMap => JHashMap}
 import org.junit.Assert.{assertEquals, fail}
